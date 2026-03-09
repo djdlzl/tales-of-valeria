@@ -1,0 +1,48 @@
+# Unity 자동 생성 폴더 (git 제외)
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# 메모리 캡처
+/[Mm]emory[Cc]aptures/
+
+# Unity Asset Store 툴
+/Assets/AssetStoreTools*
+
+# Visual Studio / Rider IDE
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# 빌드 결과물
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-build.properties
