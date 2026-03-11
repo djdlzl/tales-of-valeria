@@ -34,10 +34,11 @@
 ### 1단계: 환경 세팅
 > "개발 도구를 준비하는 단계."
 
-- [ ] Unity 설치 및 프로젝트 생성 ← 진행 중 (사용자 수동)
+- [x] Unity 설치 및 프로젝트 생성
 - [x] 아이소메트릭 카메라 세팅 (IsometricCamera.cs 작성 완료)
 - [x] 기본 폴더 구조 정리 (Assets/Scripts 등 생성 완료)
 - [x] Git 연동 + .gitignore 설정
+- [x] GitHub 원격 저장소 연동 (https://github.com/djdlzl/tales-of-valeria)
 - [ ] 무료 아이소메트릭 에셋 찾아서 테스트 환경 구성
 
 **목표**: 화면에 뭔가 보이면 성공.
@@ -48,10 +49,24 @@
 > "핵심 게임플레이가 재미있는지 검증."
 > 그래픽은 임시, 기능만 작동하면 됨.
 
-- [ ] 클릭 이동 (마우스 클릭 → 캐릭터 이동)
-- [ ] 기본 적 AI (캐릭터 감지 → 추적 → 공격)
-- [ ] 기본 전투 (클릭으로 적 공격, HP 감소, 사망)
-- [ ] 카메라 추적
+**코드 작업 (완료):**
+- [x] 클릭 이동 — `PlayerController.cs` (NavMesh 기반 클릭 이동 + 타겟 지정)
+- [x] 기본 전투 — `PlayerCombat.cs` (타겟 추적 + 자동 공격 루프 + TakeDamage)
+- [x] 적 HP/사망 — `EnemyHealth.cs` (HP 관리 + Destroy)
+- [x] 기본 적 AI — `EnemyAI.cs` (Idle → Chase → Attack → Return FSM)
+- [x] 카메라 추적 — `IsometricCamera.cs` (Lerp 부드러운 추적)
+
+**Unity Editor 씬 구성 (수동, 미완):**
+- [ ] 플레이어 오브젝트 생성 및 컴포넌트 연결
+  - NavMeshAgent, PlayerController, PlayerCombat 추가
+  - 태그: `Player` 설정
+- [ ] 적 오브젝트 생성 및 컴포넌트 연결
+  - NavMeshAgent, EnemyHealth, EnemyAI 추가
+  - 레이어: `Enemy` 설정
+- [ ] 지면(Ground) 오브젝트 레이어 설정 (`Ground` 레이어)
+- [ ] NavMesh Bake (Window → AI → Navigation → Bake)
+- [ ] 카메라에 IsometricCamera 연결, Target 필드에 플레이어 드래그
+- [ ] Play 버튼으로 동작 확인
 
 **목표**: 클릭해서 이동하고, 적과 싸울 수 있으면 성공.
 **검증**: "이게 일렌시아처럼 느껴지는가?"
@@ -145,7 +160,9 @@
 ## 현재 위치
 
 ```
-[✅ 0단계: 기획] → [🔄 1단계: 환경 세팅] → [2단계: 프로토타입] → ...
+[✅ 0단계: 기획] → [🔄 1단계: 환경 세팅] → [🔄 2단계: 프로토타입] → [3단계: 핵심 시스템] → ...
 ```
 
-**다음 할 일**: Unity Hub + Unity 6 LTS 설치 → 3D URP 프로젝트 생성
+**지금 당장 해야 할 것**:
+> 2단계 — Unity Editor에서 씬 구성 (수동 작업)
+> 자세한 내용은 위 2단계 체크리스트 참고

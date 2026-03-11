@@ -7,14 +7,35 @@
 
 ## 현재 단계
 
-**1단계 Unity 환경 세팅 진행 중**
+**2단계 프로토타입 — Unity Editor 씬 구성 필요 (수동 작업 대기 중)**
 
 ---
 
 ## 다음 할 일
 
-1. IsometricCamera.cs Unity Editor에 연결 (사용자 수동)
-2. 테스트 씬 구성 후 Play 버튼으로 확인 (사용자 수동)
+> 코드는 모두 완성. Unity Editor에서 아래 순서대로 씬을 구성해야 함.
+
+1. **플레이어 오브젝트** 생성
+   - 컴포넌트: NavMeshAgent, PlayerController, PlayerCombat
+   - 태그: `Player`
+2. **적 오브젝트** 생성
+   - 컴포넌트: NavMeshAgent, EnemyHealth, EnemyAI
+   - 레이어: `Enemy`
+3. **지면(Ground)** 레이어: `Ground` 설정
+4. **NavMesh Bake** (Window → AI → Navigation → Bake)
+5. **카메라** IsometricCamera 연결, Target = 플레이어
+6. Play 버튼으로 테스트 — "클릭 이동 + 적 전투"가 되면 2단계 완료
+
+---
+
+## 완료된 작업 (최근순)
+
+- ✅ EnemyAI.cs — 적 AI FSM (감지 → 추적 → 공격 → 복귀)
+- ✅ PlayerCombat.cs — 플레이어 자동 공격 시스템
+- ✅ EnemyHealth.cs — 적 HP + 사망 처리
+- ✅ PlayerController.cs — 클릭 이동 + 타겟 지정
+- ✅ IsometricCamera.cs — 쿼터뷰 카메라 추적
+- ✅ GitHub 원격 저장소 연동
 
 ---
 
