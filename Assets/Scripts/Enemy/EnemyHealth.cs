@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -8,6 +9,9 @@ public class EnemyHealth : MonoBehaviour
 {
     [Header("적 수치")]
     public int maxHp = 30;
+
+    /// <summary>사망 시 호출. 처치한 쪽에서 보너스 경험치 등 처리.</summary>
+    public event Action<EnemyHealth> OnDeath;
 
     private int _currentHp;
 
@@ -31,6 +35,7 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         Debug.Log($"{gameObject.name} 사망!");
+        OnDeath?.Invoke(this);
         Destroy(gameObject);
     }
 }

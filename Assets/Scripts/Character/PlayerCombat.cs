@@ -7,6 +7,7 @@ using UnityEngine.AI;
 ///   - SetTarget(enemy): 타겟 지정 → 범위 내면 공격, 범위 밖이면 접근
 ///   - ClearTarget(): 타겟 해제 (바닥 클릭 시)
 ///   - TakeDamage(dmg): EnemyAI에서 호출
+///   - 공격 시 숙련도 경험치 자동 부여 (ProficiencySystem 연동)
 /// </summary>
 public class PlayerCombat : MonoBehaviour
 {
@@ -16,14 +17,19 @@ public class PlayerCombat : MonoBehaviour
     public float attackCooldown = 1.5f;
     public float attackRange = 2f;
 
+    [Header("현재 무기")]
+    public WeaponType currentWeapon = WeaponType.Sword;
+
     private int _currentHp;
     private EnemyHealth _target;
     private NavMeshAgent _agent;
+    private ProficiencySystem _proficiency;
     private bool _isAttacking;
 
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _proficiency = GetComponent<ProficiencySystem>();
         _currentHp = maxHp;
     }
 
@@ -58,13 +64,20 @@ public class PlayerCombat : MonoBehaviour
     /// <summary>PlayerController에서 적 클릭 시 호출</summary>
     public void SetTarget(EnemyHealth enemy)
     {
+        // 이전 타겟의 사망 이벤트 해제
+        if (_target != null) _target.OnDeath -= OnTargetDeath;
+
         _target = enemy;
-        _isAttacking = false; // 코루틴 재시작을 위해 초기화
+        _isAttacking = false;
+
+        // 새 타겟의 사망 이벤트 구독 (처치 보너스 경험치)
+        if (_target != null) _target.OnDeath += OnTargetDeath;
     }
 
     /// <summary>PlayerController에서 바닥 클릭 시 호출</summary>
     public void ClearTarget()
     {
+        if (_target != null) _target.OnDeath -= OnTargetDeath;
         _target = null;
         _isAttacking = false;
     }
@@ -82,12 +95,28 @@ public class PlayerCombat : MonoBehaviour
             }
 
             _target.TakeDamage(attackDamage);
-            Debug.Log($"플레이어 공격! (데미지: {attackDamage})");
+            Debug.Log($"플레이어 공격! ({currentWeapon}, 데미지: {attackDamage})");
+
+            // 공격 시 숙련도 경험치 부여
+            if (_proficiency != null && _proficiency.config != null)
+            {
+                _proficiency.AddExp(currentWeapon, _proficiency.config.expPerAttack);
+            }
 
             yield return new WaitForSeconds(attackCooldown);
         }
 
         _isAttacking = false;
+    }
+
+    /// <summary>적 처치 시 보너스 숙련도 경험치</summary>
+    private void OnTargetDeath(EnemyHealth enemy)
+    {
+        if (_proficiency != null && _proficiency.config != null)
+        {
+            _proficiency.AddExp(currentWeapon, _proficiency.config.expPerKill);
+        }
+        enemy.OnDeath -= OnTargetDeath;
     }
 
     /// <summary>EnemyAI에서 공격 시 호출</summary>
